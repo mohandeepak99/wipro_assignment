@@ -1,0 +1,15 @@
+
+package com.wipro.mohan.feign;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
+@FeignClient(name = "MOVIE-SERVICE", url = "${movie.service.url}")
+public interface MovieFeign {
+    @PostMapping("/api/movies/idsOfMovieNames")
+    List<Long> getMoviesByNames(@RequestBody List<String> names);
+}
+

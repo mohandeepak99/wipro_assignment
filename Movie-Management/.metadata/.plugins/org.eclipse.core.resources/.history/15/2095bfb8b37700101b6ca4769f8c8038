@@ -1,0 +1,60 @@
+package com.wipro.mohan.service;
+
+import com.wipro.mohan.entities.Booking;
+import com.wipro.mohan.enumType.*;
+import com.wipro.mohan.repos.*;
+import com.wipro.mohan.exception.*;
+import com.wipro.mohan.feign.*;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class BookingService {
+
+    private final MovieFeign movieClient;  // Feign Client for Movie Service
+    private final TheatreFiegn theatreClient;  // Feign Client for Theatre Service
+    private final BookingRepository bookingRepository;
+
+    // Book a movie by movie name and theatre name
+    public Booking bookMovie(String movieName, String theatreName) {
+
+        // Fetch movie ID from the Movie Service
+        Long movieId = fetchMovieIdByName(movieName);
+
+        // Fetch theatre ID from Theatre Service
+        Long theatreId = fetchTheatreIdByName(theatreName);
+
+        // Create a new Booking object and set the details
+        Booking booking = new Booking();
+        booking.setMovieId(movieId);
+        booking.setTheatreId(theatreId);
+        booking.setBookingStatus(BookingStatus.SUCCESS);  // Set the status to SUCCESS if all goes well
+
+        // Save the booking to the database
+        return bookingRepository.save(booking);
+    }
+
+    // Helper method to fetch Movie ID by name
+    private Long fetchMovieIdByName(String movieName) {
+        // Fetching movie by name from Movie Service
+        List<Long> movieIds = movieClient.getMovieByIds(List.of(movieName)); // Simplified here
+        if (movieIds.isEmpty()) {
+            throw new MovieNotFoundException("Movie not found with name: " + movieName);
+        }
+        return movieIds.get(0);  // Return the first movie ID
+    }
+
+    // Helper method to fetch Theatre ID by name
+    private Long fetchTheatreIdByName(String theatreName) {
+        // Fetching theatre by name from Theatre Service
+        List<Long> theatreIds = theatreClient.getTheatresByName(theatreName);
+        if (theatreIds.isEmpty()) {
+            throw new TheatreNotFoundException("Theatre not found with name: " + theatreName);
+        }
+        return theatreIds.get(0);  // Return the first theatre ID
+    }
+}

@@ -1,0 +1,87 @@
+package com.wipro.mohan.service;
+
+import com.wipro.mohan.entities.Booking;
+import com.wipro.mohan.enumType.*;
+import com.wipro.mohan.repos.*;
+import com.wipro.mohan.exception.*;
+import com.wipro.mohan.feign.*;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class BookingService {
+
+    private final MovieFeign movieClient;  
+    private final TheatreFiegn theatreClient;  
+    private final BookingRepository bookingRepository;
+
+ // Book a movie by movie name and theatre name
+    public Booking bookMovie(String movieName, String theatreName) {
+
+        // Fetch movie ID from the Movie Service
+        Long movieId = fetchMovieIdByName(movieName);
+
+        // Fetch theatre ID from Theatre Service
+        Long theatreId = fetchTheatreIdByName(theatreName);
+
+        // Create a new Booking object and set the details
+        Booking booking = new Booking();
+        booking.setMovieId(movieId);
+        booking.setTheatreId(theatreId);
+        booking.setBookingStatus(BookingStatus.SUCCESS);  // Set the status to SUCCESS if all goes well
+
+        // Save the booking to the database
+        return bookingRepository.save(booking);
+    }
+
+    /* Helper method to fetch Movie ID by name using MovieClient
+    private Long fetchMovieIdByName(String movieName) {
+        List<Long> movieIds = movieClient.getMoviesByNames(List.of(movieName)); // Get movie ID by name
+        if (movieIds.isEmpty()) {
+            throw new MovieNotFoundException("Movie not found with name: " + movieName);
+        }
+        return movieIds.get(0);   Return the first movie ID
+    }
+
+    // Helper method to fetch Theatre ID by name using TheatreClient
+    private Long fetchTheatreIdByName(String theatreName) {
+        List<Long> theatreIds = theatreClient.getTheatresByName(theatreName);
+        if (theatreIds.isEmpty()) {
+            throw new TheatreNotFoundException("Theatre not found with name: " + theatreName);
+        }
+        return theatreIds.get(0);  // Return the first theatre ID
+    }*/
+    
+    private Long fetchMovieIdByName(String movieName) {
+        List<Long> movieIds = movieClient.getMoviesByNames(List.of(movieName));
+        if (movieIds.isEmpty()) {
+            throw new MovieNotFoundException("Movie not found with name: " + movieName);
+        }
+        return movieIds.get(0);
+    }
+
+    private Long fetchTheatreIdByName(String theatreName) {
+        List<Long> theatreIds = theatreClient.getTheatresByName(theatreName);
+        if (theatreIds.isEmpty()) {
+            throw new TheatreNotFoundException("Theatre not found with name: " + theatreName);
+        }
+        return theatreIds.get(0);
+    }
+
+
+ // New method to get the number of bookings
+    public long getNumberOfBookings() {
+        return bookingRepository.count();
+    }
+
+    // New method to get all bookings with pagination
+    public Page<Booking> getAllBookings(Pageable pageable) {
+        return bookingRepository.findAll(pageable);
+    }
+}

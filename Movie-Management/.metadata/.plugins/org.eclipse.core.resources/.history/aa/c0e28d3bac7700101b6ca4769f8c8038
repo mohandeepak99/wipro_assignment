@@ -1,0 +1,22 @@
+package com.wipro.mohan.controller;
+
+import com.wipro.mohan.entities.Booking;
+import com.wipro.mohan.service.BookingService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/bookings")
+@RequiredArgsConstructor
+public class BookingController {
+
+    private final BookingService bookingService;
+
+    // Book a movie by movie name and theatre name
+    @PostMapping("/book")
+    public Booking bookMovie(@RequestParam String movieName, @RequestParam String theatreName) {
+
+        // Call the booking service to save the booking details
+        return bookingService.bookMovie(movieName, theatreName);
+    }
+}

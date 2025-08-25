@@ -1,0 +1,18 @@
+package com.wipro.mohan.feign;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Map;
+
+@FeignClient(name = "MOVIE-SERVER",url = "/api/movies")
+public interface TheatreInterface {
+
+    // Calls Movie Service: GET /api/movies/by-ids?ids=1,2,3
+    @GetMapping("/api/movies/by-ids")
+    List<Map<String, Object>> getMoviesByIds(@RequestParam("ids") List<Long> ids);
+
+    @GetMapping("/api/movies/getmovieidsfortheatre")
+    List<Long> getRandomMovieIdsForTheatre(@RequestParam("count") int count); // Fetch random movie IDs
+}

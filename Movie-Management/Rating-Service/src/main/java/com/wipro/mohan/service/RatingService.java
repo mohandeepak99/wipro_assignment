@@ -1,0 +1,50 @@
+package com.wipro.mohan.service;
+
+
+import com.wipro.mohan.entities.BookingResponse;
+import com.wipro.mohan.entities.Rating;
+import com.wipro.mohan.entities.RatingRequest;
+import com.wipro.mohan.exception.BookingNotFoundException;
+import com.wipro.mohan.feign.RatingFeign;
+import com.wipro.mohan.repos.RatingRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class RatingService {
+
+    private final RatingFeign ratingFeign;
+    private final RatingRepository ratingRepository;
+
+    public Rating addRating(RatingRequest request) {
+        // Call Booking Service to verify booking exists
+        BookingResponse booking = ratingFeign.getBookingById(request.getBookingId());
+        if (booking == null) {
+            throw new BookingNotFoundException("Booking not found with ID: " + request.getBookingId());
+        }
+
+        Rating rating = new Rating();
+        rating.setBookingId(request.getBookingId());
+        rating.setMovieId(booking.getMovieId());
+        rating.setStars(request.getStars());
+        rating.setComment(request.getComment());
+
+        return ratingRepository.save(rating);
+    }
+
+    public List<Rating> getRatingsForMovie(Long movieId) {
+        return ratingRepository.findByMovieId(movieId);
+    }
+
+    public long getNumberOfRatings() {
+        return ratingRepository.count();
+    }
+
+    public Page<Rating> getRatings(Pageable pageable) {
+        return ratingRepository.findAll(pageable);
+    }
+}

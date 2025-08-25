@@ -1,0 +1,41 @@
+package com.wipro.mohan.controller;
+
+import com.wipro.mohan.entities.Booking;
+import com.wipro.mohan.repos.BookingRepository;
+import com.wipro.mohan.service.BookingService;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/bookings")
+@RequiredArgsConstructor
+public class BookingController {
+
+    private final BookingService bookingService;
+    private final BookingRepository repo;
+
+    // Book a movie by movie name and theatre name
+    @PostMapping("/book")
+    public Booking bookMovie(@RequestParam String movieName, @RequestParam String theatreName) {
+
+        // Call the booking service to save the booking details
+        return bookingService.bookMovie(movieName, theatreName);
+    }
+    
+ // Get the number of bookings (total count of bookings)
+    @GetMapping("/count")
+    public long getNumberOfBookings() {
+        return bookingService.getNumberOfBookings();
+    }
+
+    // Get all bookings with pagination
+    @GetMapping("/all")
+    public Page<Booking> getAllBookings(Pageable pageable) {
+        return bookingService.getAllBookings(pageable);
+    }
+}

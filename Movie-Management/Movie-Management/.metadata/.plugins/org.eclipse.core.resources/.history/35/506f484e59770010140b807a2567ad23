@@ -1,0 +1,5 @@
+package com.wipro.mohan.enumtype;
+
+public class MovieGenre {
+
+}

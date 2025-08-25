@@ -1,0 +1,60 @@
+package com.wipro.mohan.controller;
+
+import com.wipro.mohan.entities.Booking;
+import com.wipro.mohan.entities.MovieBookingRequest;
+import com.wipro.mohan.repos.BookingRepository;
+import com.wipro.mohan.service.BookingService;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/bookings")
+@RequiredArgsConstructor
+public class BookingController {
+
+    private final BookingService bookingService;
+
+    @PostMapping("/book")
+    public Booking bookMovie(@RequestBody MovieBookingRequest request) {
+        return bookingService.bookMovie(request.getMovieName(), request.getTheatreName());
+    }
+    
+    
+ // Get the number of all bookings
+    @GetMapping("/count")
+    public long getNumberOfBookings() {
+        return bookingService.getNumberOfBookings();
+    }
+
+    // Get all bookings with pagination
+    // Example: GET /api/bookings/page?page=0&size=5&sort=bookingId,desc
+    @GetMapping("/page")
+    public Page<Booking> getAllBookingsPaged(Pageable pageable) {
+        return bookingService.getAllBookings(pageable);
+    }
+    @GetMapping("/{bookingId}")
+    public Booking getBookingById(@PathVariable Long bookingId) {
+        return bookingService.getBookingById(bookingId);
+    }
+
+
+
+}
+
+    /*
+     * Get the number of bookings (total count of bookings)
+    @GetMapping("/count")
+    public long getNumberOfBookings() {
+        return bookingService.getNumberOfBookings();
+    }
+
+    // Get all bookings with pagination
+    @GetMapping("/all")
+    public Page<Booking> getAllBookings(Pageable pageable) {
+        return bookingService.getAllBookings(pageable);
+    }
+     */
+

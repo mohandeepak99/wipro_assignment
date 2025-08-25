@@ -1,0 +1,5 @@
+package com.wipro.mohan.repos;
+
+public interface TheatreRepository {
+
+}

@@ -1,0 +1,42 @@
+package com.wipro.mohan.controller;
+
+import com.wipro.mohan.entities.Theatre;
+import com.wipro.mohan.service.TheatreService;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/theatres")
+@RequiredArgsConstructor
+public class TheatreController {
+
+    private final TheatreService service;
+    
+    @PostMapping("/add")
+    public Theatre addTheatre(@RequestBody Theatre theatre) {
+        return service.addTheatre(theatre); // Create theatre with random movie IDs
+    }
+
+
+    @GetMapping("/getTheatres")
+    public List<Theatre> getTheatres() {
+        return service.getTheatres();
+    }
+
+    // returns ONLY movies from the Movie service
+    @GetMapping("/{id}/movies")
+    public List<Map<String, Object>> getMoviesForTheatre(@PathVariable Long id) {
+        return service.getMoviesForTheatre(id);
+    }
+    
+    @PostMapping("/idsOfTheatreNames")
+    public List<Long> getTheatresByName(@RequestBody List<String> names) {
+        return service.getTheatresByName(names);
+    }
+
+}

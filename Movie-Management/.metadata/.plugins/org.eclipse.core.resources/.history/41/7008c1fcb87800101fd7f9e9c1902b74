@@ -1,0 +1,5 @@
+package com.wipro.mohan.exception;
+
+public class GlobalExceptionHnadler {
+
+}
