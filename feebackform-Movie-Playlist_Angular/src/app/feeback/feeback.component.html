@@ -1,0 +1,53 @@
+<mat-card class="feedback-card">
+    <h2 class="feedback-title">FEEDBACK FORM</h2>
+    <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter your name" required>
+            <mat-error *ngIf="f['name'].invalid && (f['name'].dirty || f['name'].touched)">
+                Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="Enter a valid email" required>
+            <mat-error *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)">
+                <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+                <span *ngIf="f['email'].errors?.['email']">Please enter a valid email</span>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Subject</mat-label>
+            <input matInput formControlName="subject" maxlength="40" placeholder="Max 40 characters" required>
+            <mat-hint align="end">{{ f['subject'].value?.length || 0 }}/40</mat-hint>
+            <mat-error *ngIf="f['subject'].invalid && (f['subject'].dirty || f['subject'].touched)">
+                <span *ngIf="f['subject'].errors?.['required']">Subject is required</span>
+                <span *ngIf="f['subject'].errors?.['maxlength']">Max 40 characters allowed</span>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Comments / Issue</mat-label>
+            <textarea matInput formControlName="comments" rows="4" maxlength="350" placeholder="Max 350 characters"
+                required></textarea>
+            <mat-hint align="end">{{ f['comments'].value?.length || 0 }}/350</mat-hint>
+            <mat-error *ngIf="f['comments'].invalid && (f['comments'].dirty || f['comments'].touched)">
+                <span *ngIf="f['comments'].errors?.['required']">Comments are required</span>
+                <span *ngIf="f['comments'].errors?.['maxlength']">Max 350 characters allowed</span>
+            </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="feedbackForm.invalid" class="submit-btn">
+            Submit
+        </button>
+
+        <div *ngIf="showThankYou" class="thank-you-message">
+            <strong>Thank you for your feedback, we will get back to you shortly!</strong>
+        </div>
+
+
+    </form>
+</mat-card>
