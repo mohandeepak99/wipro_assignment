@@ -1,0 +1,50 @@
+
+<app-navbar></app-navbar>
+
+<br><br>
+<br>
+
+<button (click)="increment()">Increment</button>
+
+<button (click)="decrement()">decrement</button>
+
+<h1>count = {{ count }}</h1>
+<br><br>
+<br>
+<p></p>
+
+<app-calculator></app-calculator>
+
+<br><br>
+<br>
+<p></p>
+
+<app-to-do></app-to-do>
+<br><br>
+<br>
+<p></p>
+ class binding 
+
+<button [class.active]="xyz"> Click me</button>
+
+<br><br>
+<br>
+<p></p>
+ style binding 
+
+<br><br>
+<br>
+
+
+<div [style.color]="isHighlighted ? 'blue' : 'red'">This is a highlighted text.</div>
+<br><br>
+<br>
+
+ template reference variable
+<input type="text" placeholder="Enter your name" #user>
+<button (click)="showname(user.value)">Show me</button>
+
+
+<br><br>
+<h1>{{typedName}}</h1>
+

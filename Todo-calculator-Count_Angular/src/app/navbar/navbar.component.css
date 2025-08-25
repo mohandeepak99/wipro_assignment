@@ -1,0 +1,33 @@
+.custom-navbar {
+  background-color: #212529;   /* Dark background */
+}
+
+.custom-brand {
+  color: #f5c518 !important;   /* Example: yellow brand name */
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.custom-nav-item {
+  margin-right: 18px;          /* Spacing between nav items */
+}
+
+.navbar-nav .nav-link {
+  color: #f8f9fa !important;   /* Light text for links */
+  font-size: 1.08em;
+  transition: color 0.2s;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ffd700 !important;   /* Highlight on hover */
+}
+
+.signup-link {
+  color: #28a745 !important;   /* Green for Signup */
+  font-weight: bold;
+}
+
+.signin-link {
+  color: #007bff !important;   /* Blue for Signin */
+  font-weight: bold;
+}
